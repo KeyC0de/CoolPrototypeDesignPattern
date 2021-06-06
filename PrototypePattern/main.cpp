@@ -10,6 +10,7 @@ int main()
 	std::unique_ptr<Monster> vampirePrototype = std::make_unique<Vampire>();
 
 	// 2. modify the prototypical objects here
+	// ...
 
 	// 3. create the factories
 	MonsterFactory* skeletonFactory = new MonsterFactory{skeletonPrototype.get()};
@@ -27,13 +28,13 @@ int main()
 
 	// 5. create arrays of objects by copying the prototypes using the factories
 	auto skeletons = spawnMonsterArray<Skeleton>( skeletonFactory, 10 );
-	if ( auto*p = dynamic_cast<Skeleton*>( skeletons[1] ) )
+	if ( auto* p = dynamic_cast<Skeleton*>( skeletons[1] ) )
 	{
 		std::cout << "Skeleton army incoming." << L'\n';
 	}
 	
 	auto zombies = spawnMonsterArray<Zombie>( zombieFactory, 10 );
-	if ( auto*p = dynamic_cast<Skeleton*>( zombies[1] ) )
+	if ( auto* p = dynamic_cast<Skeleton*>( zombies[1] ) )
 	{
 		std::cout << "Skeleton army incoming." << L'\n';
 	}

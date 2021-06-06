@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 
+
 //============================================================
 //	\class	Monster
 //
@@ -74,7 +75,7 @@ public:
 //	\author	KeyC0de
 //	\date	2020/11/02 21:07
 //
-//	\brief	The PrototypeFactory class
+//	\brief	The Prototype/Factory/Spawner class
 //=============================================================
 class MonsterFactory final
 {
