@@ -2,7 +2,7 @@
 #include "prototype.h"
 
 
-Monster:: Monster( int attack, int defense, int minDamage, int maxDamage, 
+Monster::Monster( int attack, int defense, int minDamage, int maxDamage, 
 	int health, int morale, int luck, int speed, 
 	int initiative, int growth )
 	:
@@ -22,80 +22,82 @@ Monster:: Monster( int attack, int defense, int minDamage, int maxDamage,
 
 Skeleton::Skeleton( int attack, int defense, int minDamage, int maxDamage,
 	int health, int morale, int luck, int speed, int initiative,
-	int growth, const char* specialAbility )
+	int growth, std::string_view specialAbility )
 	:
-	Monster{ attack, defense, minDamage,
-	maxDamage, health, morale,
-	luck, speed, initiative, growth },
-	m_specialAbility{ specialAbility }
-{}
-
-Monster* Skeleton::clone()
-{
-	return new Skeleton{};
-}
-
-void Skeleton::greet() noexcept
-{
-	std::cout << "Skeleton: "
-		<< m_specialAbility << '\n';
-}
-
-
-Zombie::Zombie( int attack, int defense, int minDamage, int maxDamage,
-	int health, int morale, int luck, int speed, int initiative,
-	int growth, const char* specialAbility )
-	:
-	Monster( attack, defense, minDamage,
-	maxDamage, health, morale,
-	luck, speed, initiative, growth ),
+	Monster{attack, defense, minDamage, maxDamage, health, morale, luck, speed,
+		initiative, growth},
 	m_specialAbility{specialAbility}
 {
 
 }
 
-Monster* Zombie::clone()
+std::unique_ptr<Monster> Skeleton::clone()
 {
-	return new Zombie{};
+	return std::make_unique<Skeleton>( *this );
+}
+
+void Skeleton::greet() noexcept
+{
+	std::cout << "Skeleton: "
+		<< m_specialAbility
+		<< '\n';
+}
+
+Zombie::Zombie( int attack, int defense, int minDamage, int maxDamage,
+	int health, int morale, int luck, int speed, int initiative,
+	int growth, std::string_view specialAbility )
+	:
+	Monster(attack, defense, minDamage, maxDamage, health, morale, luck, speed,
+		initiative, growth),
+	m_specialAbility{specialAbility}
+{
+
+}
+
+std::unique_ptr<Monster> Zombie::clone()
+{
+	return std::make_unique<Zombie>( *this );
 }
 
 void Zombie::greet() noexcept
 {
 	std::cout << "Zombie: "
-		<< m_specialAbility << '\n';
+		<< m_specialAbility
+		<< '\n';
 }
 
 
 Vampire::Vampire( int attack, int defense, int minDamage, int maxDamage,
 	int health, int morale, int luck, int speed, int initiative,
-	int growth, const char* specialAbility )
+	int growth, std::string_view specialAbility )
 	:
-	Monster{ attack, defense, minDamage,
-	maxDamage, health, morale,
-	luck, speed, initiative, growth },
-	m_specialAbility{ specialAbility }
+	Monster{attack, defense, minDamage, maxDamage, health, morale, luck, speed,
+		initiative, growth},
+	m_specialAbility{specialAbility}
 {
 
 }
 
-Monster* Vampire::clone()
+std::unique_ptr<Monster> Vampire::clone()
 {
-	return new Vampire{};
+	return std::make_unique<Vampire>();
 }
 
 void Vampire::greet() noexcept
 {
 	std::cout << "Vampire: "
-		<< m_specialAbility << '\n';
+		<< m_specialAbility
+		<< '\n';
 }
 
-
-MonsterFactory::MonsterFactory( Monster* monsterPrototype )
+MonsterSpawner::MonsterSpawner( Monster* monsterPrototype )
 	:
-	m_prototype( monsterPrototype )
-{}
-
-Monster* MonsterFactory::spawnMonster()
+	m_pPrototype(monsterPrototype)
 {
-	return m_prototype->clone();
+
+}
+
+std::unique_ptr<Monster> MonsterSpawner::spawnMonster()
+{
+	return m_pPrototype->clone();
 }

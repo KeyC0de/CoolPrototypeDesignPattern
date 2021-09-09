@@ -1,5 +1,8 @@
 #include <iostream>
 #include "prototype.h"
+#if defined _DEBUG && !defined NDEBUG
+#	include <vld.h>
+#endif
 
 
 int main()
@@ -13,44 +16,47 @@ int main()
 	// ...
 
 	// 3. create the factories
-	MonsterFactory* skeletonFactory = new MonsterFactory{skeletonPrototype.get()};
-	MonsterFactory* zombieFactory = new MonsterFactory{zombiePrototype.get()};
-	MonsterFactory* vampireFactory = new MonsterFactory{vampirePrototype.get()};
+	std::unique_ptr<MonsterSpawner> skeletonFactory = std::make_unique<MonsterSpawner>( skeletonPrototype.get() );
+	std::unique_ptr<MonsterSpawner> zombieFactory = std::make_unique<MonsterSpawner>( zombiePrototype.get() );
+	std::unique_ptr<MonsterSpawner> vampireFactory = std::make_unique<MonsterSpawner>( vampirePrototype.get() );
 
 	// 4. spawn copies of the prototype objects using the factories
-	Monster* skeleton = skeletonFactory->spawnMonster();
-	Monster* zombie = zombieFactory->spawnMonster();
-	Monster* vampire = vampireFactory->spawnMonster();
+	std::unique_ptr<Monster> skeleton = skeletonFactory->spawnMonster();
+	std::unique_ptr<Monster> zombie = zombieFactory->spawnMonster();
+	std::unique_ptr<Monster> vampire = vampireFactory->spawnMonster();
 
 	skeleton->greet();
 	zombie->greet();
 	vampire->greet();
 
-	// 5. create arrays of objects by copying the prototypes using the factories
-	auto skeletons = spawnMonsterArray<Skeleton>( skeletonFactory, 10 );
-	if ( auto* p = dynamic_cast<Skeleton*>( skeletons[1] ) )
+	// 5. create arrays of objects by copying the prototypes
+	auto skeletons = spawnMonsterArray<Skeleton>( skeletonFactory.get(),
+		10 );
+	if ( auto* p = dynamic_cast<Skeleton*>( skeletons[1].get() ) )
 	{
-		std::cout << "Skeleton army incoming." << L'\n';
+		std::cout << "Skeleton army incoming.\n";
 	}
 	
-	auto zombies = spawnMonsterArray<Zombie>( zombieFactory, 10 );
-	if ( auto* p = dynamic_cast<Skeleton*>( zombies[1] ) )
+	auto zombies = spawnMonsterArray<Zombie>( zombieFactory.get(),
+		10 );
+	if ( auto* p = dynamic_cast<Skeleton*>( zombies[1].get() ) )
 	{
-		std::cout << "Skeleton army incoming." << L'\n';
+		std::cout << "Skeleton army incoming.\n";
 	}
 	else
 	{
-		std::cout << "This is not a Skeleton army." << L'\n';
+		std::cout << "This is not a Skeleton army.\n";
 	}
-	if ( auto*p = dynamic_cast<Zombie*>( zombies[1] ) )
+	if ( auto* p = dynamic_cast<Zombie*>( zombies[1].get() ) )
 	{
-		std::cout << "Zombie army incoming." << L'\n';
+		std::cout << "Zombie army incoming.\n";
 	}
 	
-	auto vampires = spawnMonsterArray<Vampire>( vampireFactory, 10 );
-	if ( auto*p = dynamic_cast<Vampire*>( vampires[1] ) )
+	auto vampires = spawnMonsterArray<Vampire>( vampireFactory.get(),
+		10 );
+	if ( auto*p = dynamic_cast<Vampire*>( vampires[1].get() ) )
 	{
-		std::cout << "Vampire army incoming." << L'\n';
+		std::cout << "Vampire army incoming.\n";
 	}
 	
 	for ( const auto& i : skeletons )
