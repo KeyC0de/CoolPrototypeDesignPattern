@@ -35,7 +35,7 @@ public:
 	virtual void greet() noexcept = 0;
 };
 
-class Skeleton final 
+class Skeleton final
 	: public Monster
 {
 	std::string_view m_specialAbility;
@@ -48,7 +48,7 @@ public:
 	void greet() noexcept override;
 };
 
-class Zombie final 
+class Zombie final
 	: public Monster
 {
 	std::string_view m_specialAbility;
@@ -61,7 +61,7 @@ public:
 	void greet() noexcept override;
 };
 
-class Vampire final 
+class Vampire final
 	: public Monster
 {
 	std::string_view m_specialAbility;

@@ -12,15 +12,15 @@ int main()
 	std::unique_ptr<Monster> zombiePrototype = std::make_unique<Zombie>();
 	std::unique_ptr<Monster> vampirePrototype = std::make_unique<Vampire>();
 
-	// 2. modify the prototypical objects here
+	// 2. modify the prototypical objects here if you want
 	// ...
 
-	// 3. create the factories
+	// 3. create the spawners
 	std::unique_ptr<MonsterSpawner> skeletonFactory = std::make_unique<MonsterSpawner>( skeletonPrototype.get() );
 	std::unique_ptr<MonsterSpawner> zombieFactory = std::make_unique<MonsterSpawner>( zombiePrototype.get() );
 	std::unique_ptr<MonsterSpawner> vampireFactory = std::make_unique<MonsterSpawner>( vampirePrototype.get() );
 
-	// 4. spawn copies of the prototype objects using the factories
+	// 4. spawn copies of the prototype objects using the spawners
 	std::unique_ptr<Monster> skeleton = skeletonFactory->spawnMonster();
 	std::unique_ptr<Monster> zombie = zombieFactory->spawnMonster();
 	std::unique_ptr<Monster> vampire = vampireFactory->spawnMonster();
@@ -72,7 +72,8 @@ int main()
 		i->greet();
 	}
 
-	std::system( "pause" );
-	return 0;
+#if defined _DEBUG && !defined NDEBUG
+	while ( !getchar() );
+#endif
+	return EXIT_SUCCESS;
 }
-
